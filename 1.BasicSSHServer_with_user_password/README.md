@@ -3,6 +3,8 @@
 
 Scripts to create a bunch of "virtual" server machines using Docker containers.
 
+These scripts were initially aimed at containers based on Ubuntu, but now Alpine Linux is also supported allowing much smaller images to be used.
+
 When developing a Pexpect tutorial I wanted to have a bunch of machines to test against.
 
 The simplest/lightest weight solution is to create a bunch of containers with OpenSSH installed and enabled.
@@ -10,7 +12,7 @@ The simplest/lightest weight solution is to create a bunch of containers with Op
 Although use of ssh login is not the 'container' or micro-service way, this provides a neat solution
 to have a bunch of 'virtual' servers for testing.
 
-The Dockerfile creates an extension of the latest Ubuntu image, installing openssh-server, whois, sudo packages.
+The Dockerfile creates an extension of the latest Ubuntu (or Alpine) image, installing openssh-server, whois, sudo packages.
 
 We also create a dummy user with username 'user' and password 'password'.
 We enable sudo for this user.
@@ -38,5 +40,10 @@ Creating the 'virtual' servers
 Run ./run.sh which will launch new container instances with open-ssh running.
 
 You can now ssh to these 'machines' as user 'user' and password 'password'.
+
+Note
+====
+Note: Setup of sshd for Alpine Linux was helped by this repository
+          https://github.com/macropin/docker-sshd
 
 
