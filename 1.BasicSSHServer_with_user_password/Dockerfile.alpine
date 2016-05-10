@@ -14,18 +14,20 @@ RUN rc-update add sshd
 RUN rc-status
 
 RUN touch /run/openrc/softlevel
-RUN /etc/init.d/sshd start
-RUN ps -fade | grep sshd
 RUN ip a
 
-#ENV PASSWORD=$(mkpasswd weak)
-#RUN echo $PASSWORD
-#RUN PASSWORD=$(mkpasswd weak)
-#RUN echo $PASSWORD
-
-#RUN useradd user --uid 1001 --password $(mkpasswd password) --home /home/user --create-home --gid users --groups users
-#RUN addgroup users && adduser -s /bin/bash -D -G users user
 RUN adduser -s /bin/bash -D -G users user
+
+RUN ssh-keygen -A
+
+RUN [ ! -d /home/user/.ssh ] && mkdir /home/user/.ssh
+ADD authorized_keys /home/user/.ssh/authorized_keys
+
+RUN chmod 500 /home/user/.ssh
+RUN chmod 400 /home/user/.ssh/authorized_keys
+RUN chown -R user:users /home/user/.ssh
+RUN echo PasswordAuthentication no >> /etc/ssh/sshd_config
+RUN passwd -u user
 
 ADD start_ssh_incontainer.sh /
 
