@@ -39,11 +39,16 @@ docker_run() {
     docker ps | grep $NAME && {
         echo "Container1 already running"
         CONTAINER_ID=$(docker ps | grep $NAME | awk '{print $1;}')
-    } || {
-        CMD="docker run --name $NAME -h $NAME -itd $IMAGE /start_ssh_incontainer.sh"
-        echo $CMD
-        CONTAINER_ID=$($CMD)
+        return
     }
+
+    docker ps -a | grep $NAME && {
+        die "You need to remove stopped containers first";
+    }
+
+    CMD="docker run --name $NAME -h $NAME -itd $IMAGE /start_ssh_incontainer.sh"
+    echo $CMD
+    CONTAINER_ID=$($CMD)
 
     [ -z "$CONTAINER_ID" ] && die "Failed to start container"
 }
