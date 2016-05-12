@@ -43,28 +43,26 @@ getIP() {
         grep \"IPAddress | tail -1 | sed -e 's/.*: "//' -e 's/".*//'
 }
 
-#docker ps | grep container && die "Containers already running"
+docker_run() {
+    NAME=$1; shift
+    IMAGE=$1; shift
 
-docker ps | grep container1 && {
-    echo "Container1 already running"
-    CONTAINER_ID1=$(docker ps | grep container1 | awk '{print $1;}')
-} || {
-    CONTAINER_ID1=$(docker run --name container1 -h container1 -itd $IMAGE "/start_ssh_incontainer.sh")
+    docker ps | grep $NAME && {
+        echo "Container1 already running"
+        CONTAINER_ID=$(docker ps | grep $NAME | awk '{print $1;}')
+    } || {
+        CMD="docker run --name $NAME -h $NAME -itd $IMAGE /start_ssh_incontainer.sh"
+        echo $CMD
+        CONTAINER_ID=$($CMD)
+    }
+
+    [ -z "$CONTAINER_ID" ] && die "Failed to start container"
 }
 
-docker ps | grep container2 && {
-    echo "Container2 already running"
-    CONTAINER_ID2=$(docker ps | grep container2 | awk '{print $1;}')
-} || {
-    CONTAINER_ID2=$(docker run --name container2 -h container2 -itd $IMAGE "/start_ssh_incontainer.sh")
-}
 
-docker ps | grep container3 && {
-    echo "Container3 already running"
-    CONTAINER_ID3=$(docker ps | grep container3 | awk '{print $1;}')
-} || {
-    CONTAINER_ID3=$(docker run --name container3 -h container3 -itd $IMAGE "/start_ssh_incontainer.sh")
-}
+docker_run "container1" $IMAGE; CONTAINER_ID1=$CONTAINER_ID
+docker_run "container2" $IMAGE; CONTAINER_ID2=$CONTAINER_ID
+docker_run "container3" $IMAGE; CONTAINER_ID3=$CONTAINER_ID
 
 #set -x
 IP1=$(getIP $CONTAINER_ID1)
