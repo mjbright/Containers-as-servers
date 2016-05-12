@@ -116,12 +116,17 @@ step_banner "Check ssh connection to container[123]"
 #ssh -t user@$IP1 "sudo hostname"
 #ssh -t user@$IP2 "sudo hostname"
 #ssh -t user@$IP3 "sudo hostname"
-CMD='ssh user@'$IP1' echo My hostname=$(hostname)'
+HOST_CMD='hostname'
+
+CMD='ssh user@'$IP1' "'$HOST_CMD'"'
 echo "---- Output of '$CMD':"; $CMD
-CMD='ssh user@'$IP2' echo My hostname=$(hostname)'
+CMD='ssh user@'$IP2' "'$HOST_CMD'"'
 echo "---- Output of '$CMD':"; $CMD
-CMD='ssh user@'$IP3' echo My hostname=$(hostname)'
+CMD='ssh user@'$IP3' "'$HOST_CMD'"'
 echo "---- Output of '$CMD':"; $CMD
+
+#CMD='ssh user@'$IP1' touch /tmp/ON_$(hostname)'
+#echo "---- Output of '$CMD':"; $CMD
 #set +x
 
 
