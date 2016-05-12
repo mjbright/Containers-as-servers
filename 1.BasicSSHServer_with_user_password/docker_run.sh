@@ -49,21 +49,21 @@ docker ps | grep container1 && {
     echo "Container1 already running"
     CONTAINER_ID1=$(docker ps | grep container1 | awk '{print $1;}')
 } || {
-    CONTAINER_ID1=$(docker run --rm --name container1 -h container1 -itd $IMAGE "/start_ssh_incontainer.sh")
+    CONTAINER_ID1=$(docker run --name container1 -h container1 -itd $IMAGE "/start_ssh_incontainer.sh")
 }
 
 docker ps | grep container2 && {
     echo "Container2 already running"
     CONTAINER_ID2=$(docker ps | grep container2 | awk '{print $1;}')
 } || {
-    CONTAINER_ID2=$(docker run --rm --name container2 -h container2 -itd $IMAGE "/start_ssh_incontainer.sh")
+    CONTAINER_ID2=$(docker run --name container2 -h container2 -itd $IMAGE "/start_ssh_incontainer.sh")
 }
 
 docker ps | grep container3 && {
     echo "Container3 already running"
     CONTAINER_ID3=$(docker ps | grep container3 | awk '{print $1;}')
 } || {
-    CONTAINER_ID3=$(docker run --rm --name container3 -h container3 -itd $IMAGE "/start_ssh_incontainer.sh")
+    CONTAINER_ID3=$(docker run --name container3 -h container3 -itd $IMAGE "/start_ssh_incontainer.sh")
 }
 
 #set -x
